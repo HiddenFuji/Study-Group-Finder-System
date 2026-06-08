@@ -19,6 +19,7 @@
         <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
             <c:choose>
                 <c:when test="${param.msg == 'deleted'}">User account successfully deleted.</c:when>
+                <c:when test="${param.msg == 'roleChanged'}">User role successfully updated.</c:when>
             </c:choose>
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
@@ -64,6 +65,16 @@
                                 </td>
                                 <td>${u.createdAt.substring(0, 10)}</td>
                                 <td class="text-end pe-4">
+                                    <c:if test="${u.userId != sessionScope.loggedUser.userId}">
+                                        <form action="${pageContext.request.contextPath}/admin" method="POST" class="d-inline">
+                                            <input type="hidden" name="action" value="changeRole">
+                                            <input type="hidden" name="user_id" value="${u.userId}">
+                                            <input type="hidden" name="role" value="${u.role == 'admin' ? 'student' : 'admin'}">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary" onclick="return confirm('Change role to ${u.role == 'admin' ? 'student' : 'admin'}?');">
+                                                <i class="bi bi-arrow-repeat"></i> Make ${u.role == 'admin' ? 'Student' : 'Admin'}
+                                            </button>
+                                        </form>
+                                    </c:if>
                                     <c:if test="${u.role != 'admin'}">
                                         <form action="${pageContext.request.contextPath}/admin" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to permanently delete this user?');">
                                             <input type="hidden" name="action" value="deleteUser">

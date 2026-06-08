@@ -58,6 +58,13 @@ public class AdminServlet extends HttpServlet {
                 int uid = parseInt(req.getParameter("user_id"), 0);
                 userDAO.deleteUser(uid);
                 resp.sendRedirect(req.getContextPath() + "/admin?action=users&msg=deleted");
+            } else if ("changeRole".equals(action)) {
+                int uid = parseInt(req.getParameter("user_id"), 0);
+                String newRole = req.getParameter("role");
+                if ("admin".equals(newRole) || "student".equals(newRole)) {
+                    userDAO.changeRole(uid, newRole);
+                }
+                resp.sendRedirect(req.getContextPath() + "/admin?action=users&msg=roleChanged");
             } else if ("deleteGroup".equals(action)) {
                 int gid = parseInt(req.getParameter("group_id"), 0);
                 groupDAO.delete(gid);

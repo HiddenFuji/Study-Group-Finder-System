@@ -100,6 +100,17 @@ public class UserDAO {
         }
     }
 
+    /** Change user role (admin only) */
+    public boolean changeRole(int userId, String newRole) throws SQLException {
+        String sql = "UPDATE users SET role=?, updated_at=NOW() WHERE user_id=?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, newRole);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
     /** Get all users (admin) */
     public List<User> getAllUsers() throws SQLException {
         List<User> list = new ArrayList<User>();
