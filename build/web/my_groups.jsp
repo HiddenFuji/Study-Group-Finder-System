@@ -53,7 +53,7 @@
         <!-- Groups Grid -->
         <div class="row g-4">
             <% for (StudyGroup g : myGroups) { %>
-            <div class="col-md-6">
+            <div class="col-md-6 col-lg-4">
                 <div class="simple-card p-4 h-100 d-flex flex-column">
                     <div class="d-flex justify-content-between align-items-start mb-1">
                         <h4 class="fw-bold text-dark mb-0"><%= g.getGroupName() %></h4>

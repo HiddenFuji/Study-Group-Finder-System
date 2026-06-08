@@ -82,7 +82,7 @@
     <div class="row g-4">
         <% if (groups != null) { 
             for (StudyGroup g : groups) { %>
-        <div class="col-md-6">
+        <div class="col-md-6 col-lg-4">
             <div class="simple-card p-4 h-100 d-flex flex-column">
                 <h4 class="fw-bold text-dark mb-1"><%= g.getGroupName() %></h4>
                 <div class="text-primary fw-semibold mb-3"><%= g.getCourseCode() %></div>

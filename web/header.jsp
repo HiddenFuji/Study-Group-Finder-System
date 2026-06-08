@@ -60,6 +60,7 @@
             StudyFinder
         </a>
         
+        <% if (!loggedUser.isAdmin()) { %>
         <!-- Search Bar -->
         <div class="ms-5 d-none d-md-block">
             <form action="<%= ctx %>/groups" method="get" class="position-relative">
@@ -68,6 +69,7 @@
                 <input type="text" name="q" class="form-control rounded-pill ps-5 bg-white border" placeholder="Search groups, subjects..." style="width: 350px;">
             </form>
         </div>
+        <% } %>
     </div>
     
     <div class="d-flex align-items-center gap-4">
