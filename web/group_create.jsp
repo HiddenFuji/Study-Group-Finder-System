@@ -21,17 +21,17 @@
 
             <div class="mb-4">
                 <label class="form-label text-dark fw-medium">Group Name *</label>
-                <input type="text" name="group_name" class="form-control form-control-lg bg-light bg-opacity-50" placeholder="e.g., Advanced Calculus Study Group" required>
+                <input type="text" name="group_name" class="form-control form-control-lg bg-light bg-opacity-50" placeholder="e.g., Web Application Study Group" required>
             </div>
 
             <div class="row g-4 mb-4">
                 <div class="col-md-6">
                     <label class="form-label text-dark fw-medium">Subject *</label>
-                    <input type="text" name="subject" class="form-control form-control-lg bg-light bg-opacity-50" placeholder="e.g., Mathematics" required>
+                    <input type="text" name="subject" class="form-control form-control-lg bg-light bg-opacity-50" placeholder="e.g., Web Development" required>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label text-dark fw-medium">Course Code *</label>
-                    <input type="text" name="course_code" class="form-control form-control-lg bg-light bg-opacity-50" placeholder="e.g., MATH 301" required>
+                    <input type="text" name="course_code" class="form-control form-control-lg bg-light bg-opacity-50" placeholder="e.g., CSE3023" required>
                 </div>
             </div>
 

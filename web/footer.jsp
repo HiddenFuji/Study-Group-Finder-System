@@ -26,6 +26,12 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+// Fix for browser back button (Bfcache)
+// Unconditionally remove the overlay on pageshow to fix cache issues across all browsers
+window.addEventListener('pageshow', function() {
+    document.querySelectorAll('.page-transition-overlay-in').forEach(el => el.remove());
+});
 </script>
 </body>
 </html>
