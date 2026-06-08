@@ -46,9 +46,10 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Simple Custom CSS -->
-    <link href="<%= ctx %>/assets/css/style.css" rel="stylesheet">
+    <link href="<%= ctx %>/assets/css/style.css?v=2" rel="stylesheet">
 </head>
 <body>
+<div class="page-transition-overlay-out"></div>
 
 <% if (loggedUser != null) { %>
 <!-- Top Navbar -->
