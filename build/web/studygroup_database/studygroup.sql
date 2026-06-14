@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 08, 2026 at 06:40 AM
+-- Generation Time: Jun 14, 2026 at 05:55 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -45,7 +45,7 @@ INSERT INTO `discussions` (`message_id`, `group_id`, `user_id`, `parent_id`, `co
 (1, 1, 2, NULL, 'Welcome everyone! Let\'s start with Big O notation review.', '2026-06-07 00:19:09', '2026-06-07 00:19:09'),
 (2, 1, 3, 1, 'Great idea! I suggest we also cover space complexity.', '2026-06-07 00:19:09', '2026-06-07 00:19:09'),
 (3, 1, 4, 1, 'I found a great resource on Coursera for this topic.', '2026-06-07 00:19:09', '2026-06-07 00:19:09'),
-(4, 2, 3, NULL, 'What framework are we using for the frontend — Bootstrap or Tailwind?', '2026-06-07 00:19:09', '2026-06-07 00:19:09'),
+(4, 2, 3, NULL, 'What framework are we using for the frontend ??? Bootstrap or Tailwind?', '2026-06-07 00:19:09', '2026-06-07 00:19:09'),
 (5, 2, 4, 4, 'Let\'s stick with Bootstrap 5 since most of us know it already.', '2026-06-07 00:19:09', '2026-06-07 00:19:09'),
 (7, 4, 4, NULL, 'Has anyone read the new GPT-4 technical paper?', '2026-06-07 00:19:09', '2026-06-07 00:19:09'),
 (8, 5, 5, NULL, 'Lab equipment is booked for Tuesday. Please be on time.', '2026-06-07 00:19:09', '2026-06-07 00:19:09'),
