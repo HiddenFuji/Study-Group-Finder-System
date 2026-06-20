@@ -63,7 +63,7 @@ public class MembershipDAO {
 
     /** Get all active members of a group with user details */
     public List<Membership> getMembersByGroup(int groupId) throws SQLException {
-        String sql = "SELECT mb.*, u.full_name, u.email, u.major, u.academic_year, u.profile_pic " +
+        String sql = "SELECT mb.*, u.full_name, u.email, u.major, u.academic_year " +
                      "FROM memberships mb JOIN users u ON u.user_id=mb.user_id " +
                      "WHERE mb.group_id=? AND mb.status='active' ORDER BY mb.join_date ASC";
         try (Connection conn = DBConnection.getConnection();
@@ -98,7 +98,6 @@ public class MembershipDAO {
         m.setEmail(rs.getString("email"));
         m.setMajor(rs.getString("major"));
         m.setAcademicYear(rs.getString("academic_year"));
-        m.setProfilePic(rs.getString("profile_pic") != null ? rs.getString("profile_pic") : "default.png");
         return m;
     }
 }

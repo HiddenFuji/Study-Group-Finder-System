@@ -7,10 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
 
-/**
- * AuthServlet — Controller Layer
- * Handles: /auth?action=login | register | logout
- */
 @WebServlet("/auth")
 public class AuthServlet extends HttpServlet {
 
@@ -65,7 +61,7 @@ public class AuthServlet extends HttpServlet {
             if (user != null) {
                 HttpSession session = req.getSession(true);
                 session.setAttribute("loggedUser", user);
-                session.setMaxInactiveInterval(30 * 60); // 30 minutes
+                session.setMaxInactiveInterval(45 * 60); // 45 minutes timeout session
 
                 if (user.isAdmin()) {
                     resp.sendRedirect(req.getContextPath() + "/admin");

@@ -89,17 +89,6 @@ public class UserDAO {
         }
     }
 
-    /** Update profile picture filename */
-    public boolean updateProfilePic(int userId, String filename) throws SQLException {
-        String sql = "UPDATE users SET profile_pic=?, updated_at=NOW() WHERE user_id=?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, filename);
-            ps.setInt(2, userId);
-            return ps.executeUpdate() > 0;
-        }
-    }
-
     /** Change user role (admin only) */
     public boolean changeRole(int userId, String newRole) throws SQLException {
         String sql = "UPDATE users SET role=?, updated_at=NOW() WHERE user_id=?";
@@ -165,7 +154,7 @@ public class UserDAO {
         u.setUniversity(rs.getString("university"));
         u.setMajor(rs.getString("major"));
         u.setAcademicYear(rs.getString("academic_year"));
-        u.setProfilePic(rs.getString("profile_pic") != null ? rs.getString("profile_pic") : "default.png");
+
         u.setRole(rs.getString("role"));
         u.setCreatedAt(rs.getString("created_at"));
         return u;

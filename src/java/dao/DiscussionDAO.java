@@ -51,7 +51,7 @@ public class DiscussionDAO {
 
     /** Get top-level posts for a group (with reply counts) */
     public List<Discussion> getTopLevelByGroup(int groupId) throws SQLException {
-        String sql = "SELECT d.*, u.full_name AS author_name, u.profile_pic AS author_pic, " +
+        String sql = "SELECT d.*, u.full_name AS author_name, " +
                      "(SELECT COUNT(*) FROM discussions r WHERE r.parent_id=d.message_id) AS reply_count " +
                      "FROM discussions d JOIN users u ON u.user_id=d.user_id " +
                      "WHERE d.group_id=? AND d.parent_id IS NULL " +
@@ -68,7 +68,7 @@ public class DiscussionDAO {
 
     /** Get replies to a specific post */
     public List<Discussion> getReplies(int parentId) throws SQLException {
-        String sql = "SELECT d.*, u.full_name AS author_name, u.profile_pic AS author_pic, 0 AS reply_count " +
+        String sql = "SELECT d.*, u.full_name AS author_name, 0 AS reply_count " +
                      "FROM discussions d JOIN users u ON u.user_id=d.user_id " +
                      "WHERE d.parent_id=? ORDER BY d.created_at ASC";
         try (Connection conn = DBConnection.getConnection();
@@ -83,7 +83,7 @@ public class DiscussionDAO {
 
     /** Find a single post by ID */
     public Discussion findById(int messageId) throws SQLException {
-        String sql = "SELECT d.*, u.full_name AS author_name, u.profile_pic AS author_pic, 0 AS reply_count " +
+        String sql = "SELECT d.*, u.full_name AS author_name, 0 AS reply_count " +
                      "FROM discussions d JOIN users u ON u.user_id=d.user_id WHERE d.message_id=?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -104,8 +104,6 @@ public class DiscussionDAO {
         d.setCreatedAt(rs.getString("created_at"));
         d.setUpdatedAt(rs.getString("updated_at"));
         d.setAuthorName(rs.getString("author_name"));
-        String pic = rs.getString("author_pic");
-        d.setAuthorPic(pic != null ? pic : "default.png");
         d.setReplyCount(rs.getInt("reply_count"));
         return d;
     }

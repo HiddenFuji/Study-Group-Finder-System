@@ -8,23 +8,18 @@
     <display-name>Study Group Finder System</display-name>
     <description>CSE3023 Web Application Development - Study Group Finder</description>
 
-    <!-- ============================================================ -->
-    <!-- Welcome Page                                                  -->
-    <!-- ============================================================ -->
+    <!--welcome page-->
     <welcome-file-list>
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
-
-    <!-- ============================================================ -->
-    <!-- Session Config (30 minutes timeout)                          -->
-    <!-- ============================================================ -->
+    
+    
+    <!-- session will timeout after 45 minutes-->
     <session-config>
-        <session-timeout>30</session-timeout>
+        <session-timeout>45</session-timeout> 
     </session-config>
 
-    <!-- ============================================================ -->
-    <!-- Error Pages                                                   -->
-    <!-- ============================================================ -->
+    <!-- unique error page -->
     <error-page>
         <error-code>404</error-code>
         <location>/error_404.jsp</location>

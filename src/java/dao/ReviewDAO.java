@@ -37,7 +37,7 @@ public class ReviewDAO {
 
     /** Get all reviews for a group */
     public List<Review> getByGroup(int groupId) throws SQLException {
-        String sql = "SELECT r.*, u.full_name AS reviewer_name, u.profile_pic AS reviewer_pic " +
+        String sql = "SELECT r.*, u.full_name AS reviewer_name " +
                      "FROM reviews r JOIN users u ON u.user_id=r.user_id " +
                      "WHERE r.group_id=? ORDER BY r.created_at DESC";
         try (Connection conn = DBConnection.getConnection();
@@ -64,7 +64,7 @@ public class ReviewDAO {
 
     /** Get a user's review for a group */
     public Review getUserReview(int userId, int groupId) throws SQLException {
-        String sql = "SELECT r.*, u.full_name AS reviewer_name, u.profile_pic AS reviewer_pic " +
+        String sql = "SELECT r.*, u.full_name AS reviewer_name " +
                      "FROM reviews r JOIN users u ON u.user_id=r.user_id " +
                      "WHERE r.user_id=? AND r.group_id=?";
         try (Connection conn = DBConnection.getConnection();
@@ -85,8 +85,6 @@ public class ReviewDAO {
         r.setReviewText(rs.getString("review_text"));
         r.setCreatedAt(rs.getString("created_at"));
         r.setReviewerName(rs.getString("reviewer_name"));
-        String pic = rs.getString("reviewer_pic");
-        r.setReviewerPic(pic != null ? pic : "default.png");
         return r;
     }
 }
