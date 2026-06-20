@@ -31,9 +31,6 @@ public class GroupServlet extends HttpServlet {
     private final DiscussionDAO   discDAO    = new DiscussionDAO();
     private final ReviewDAO       reviewDAO  = new ReviewDAO();
 
-    // ============================================================
-    // GET requests
-    // ============================================================
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -66,9 +63,6 @@ public class GroupServlet extends HttpServlet {
         }
     }
 
-    // ============================================================
-    // POST requests
-    // ============================================================
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -102,10 +96,6 @@ public class GroupServlet extends HttpServlet {
             req.getRequestDispatcher("/groups_find.jsp").forward(req, resp);
         }
     }
-
-    // ============================================================
-    // GET Handlers
-    // ============================================================
 
     private void showFind(HttpServletRequest req, HttpServletResponse resp, User user)
             throws Exception {
@@ -204,10 +194,7 @@ public class GroupServlet extends HttpServlet {
         req.getRequestDispatcher("/group_edit.jsp").forward(req, resp);
     }
 
-    // ============================================================
-    // POST Handlers
-    // ============================================================
-
+  
     private void handleCreate(HttpServletRequest req, HttpServletResponse resp, User user)
             throws Exception {
         StudyGroup g = buildGroupFromRequest(req, user.getUserId());
@@ -289,9 +276,6 @@ public class GroupServlet extends HttpServlet {
         resp.sendRedirect(req.getContextPath() + "/groups?action=my&msg=left");
     }
 
-    // ============================================================
-    // Helpers
-    // ============================================================
 
     private StudyGroup buildGroupFromRequest(HttpServletRequest req, int creatorId) {
         StudyGroup g = new StudyGroup();
