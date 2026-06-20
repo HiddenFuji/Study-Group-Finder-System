@@ -1,120 +1,123 @@
 package controller;
 
-import dao.*;
+import dao.StudyGroupDAO;
+import dao.StudySessionDAO;
+import dao.UserDAO;
 import model.User;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-/**
- * AdminServlet — Controller Layer
- * Only accessible by users with role = 'admin'.
- * GET  /admin                   → admin dashboard stats
- * GET  /admin?action=users      → manage users
- * GET  /admin?action=groups     → manage groups
- * POST /admin?action=deleteUser → delete a user
- * POST /admin?action=deleteGroup → delete a group
- */
 @WebServlet("/admin")
 public class AdminServlet extends HttpServlet {
 
-    private final UserDAO       userDAO  = new UserDAO();
-    private final StudyGroupDAO groupDAO = new StudyGroupDAO();
-    private final StudySessionDAO sessionDAO = new StudySessionDAO();
+    private UserDAO userDAO = new UserDAO();
+    private StudyGroupDAO groupDAO = new StudyGroupDAO();
+    private StudySessionDAO sessionDAO = new StudySessionDAO();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        User user = getAdminUser(req, resp);
-        if (user == null) return;
-
-        String action = nvl(req.getParameter("action"), "dashboard");
-        try {
-            if ("users".equals(action)) {
-                showUsers(req, resp);
-            } else if ("groups".equals(action)) {
-                showGroups(req, resp);
-            } else {
-                showDashboard(req, resp);
-            }
-        } catch (Exception e) {
-            req.setAttribute("error", e.getMessage());
-            req.getRequestDispatcher("/admin_dashboard.jsp").forward(req, resp);
+        // Check if user is logged in and is admin
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("loggedUser") == null) {
+            response.sendRedirect(request.getContextPath() + "/auth?action=login");
+            return;
         }
-    }
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-
-        User user = getAdminUser(req, resp);
-        if (user == null) return;
-
-        String action = nvl(req.getParameter("action"));
-        try {
-            if ("deleteUser".equals(action)) {
-                int uid = parseInt(req.getParameter("user_id"), 0);
-                userDAO.deleteUser(uid);
-                resp.sendRedirect(req.getContextPath() + "/admin?action=users&msg=deleted");
-            } else if ("changeRole".equals(action)) {
-                int uid = parseInt(req.getParameter("user_id"), 0);
-                String newRole = req.getParameter("role");
-                if ("admin".equals(newRole) || "student".equals(newRole)) {
-                    userDAO.changeRole(uid, newRole);
-                }
-                resp.sendRedirect(req.getContextPath() + "/admin?action=users&msg=roleChanged");
-            } else if ("deleteGroup".equals(action)) {
-                int gid = parseInt(req.getParameter("group_id"), 0);
-                groupDAO.delete(gid);
-                resp.sendRedirect(req.getContextPath() + "/admin?action=groups&msg=deleted");
-            } else {
-                resp.sendRedirect(req.getContextPath() + "/admin");
-            }
-        } catch (Exception e) {
-            resp.sendRedirect(req.getContextPath() + "/admin");
-        }
-    }
-
-    private void showDashboard(HttpServletRequest req, HttpServletResponse resp)
-            throws Exception {
-        req.setAttribute("totalStudents",  userDAO.countStudents());
-        req.setAttribute("totalGroups",    groupDAO.countAll());
-        req.setAttribute("totalSessions",  sessionDAO.countAll());
-        req.setAttribute("recentUsers",    userDAO.getAllUsers());
-        req.getRequestDispatcher("/admin_dashboard.jsp").forward(req, resp);
-    }
-
-    private void showUsers(HttpServletRequest req, HttpServletResponse resp)
-            throws Exception {
-        req.setAttribute("users", userDAO.getAllUsers());
-        req.getRequestDispatcher("/admin_users.jsp").forward(req, resp);
-    }
-
-    private void showGroups(HttpServletRequest req, HttpServletResponse resp)
-            throws Exception {
-        req.setAttribute("groups", groupDAO.getAllForAdmin());
-        req.getRequestDispatcher("/admin_groups.jsp").forward(req, resp);
-    }
-
-    /** Auth guard — only admins allowed */
-    private User getAdminUser(HttpServletRequest req, HttpServletResponse resp)
-            throws IOException {
-        HttpSession session = req.getSession(false);
-        User user = (session != null) ? (User) session.getAttribute("loggedUser") : null;
-        if (user == null) {
-            resp.sendRedirect(req.getContextPath() + "/auth?action=login");
-            return null;
-        }
+        User user = (User) session.getAttribute("loggedUser");
         if (!user.isAdmin()) {
-            resp.sendRedirect(req.getContextPath() + "/dashboard");
-            return null;
+            response.sendRedirect(request.getContextPath() + "/dashboard");
+            return;
         }
-        return user;
+
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "dashboard";
+        }
+
+        try {
+            if (action.equals("users")) {
+                request.setAttribute("users", userDAO.getAllUsers());
+                request.getRequestDispatcher("/admin_users.jsp").forward(request, response);
+            } else if (action.equals("groups")) {
+                request.setAttribute("groups", groupDAO.getAllForAdmin());
+                request.getRequestDispatcher("/admin_groups.jsp").forward(request, response);
+            } else {
+                // Default is dashboard
+                request.setAttribute("totalStudents", userDAO.countStudents());
+                request.setAttribute("totalGroups", groupDAO.countAll());
+                request.setAttribute("totalSessions", sessionDAO.countAll());
+                request.setAttribute("recentUsers", userDAO.getAllUsers());
+                request.getRequestDispatcher("/admin_dashboard.jsp").forward(request, response);
+            }
+        } catch (Exception e) {
+            request.setAttribute("error", e.getMessage());
+            request.getRequestDispatcher("/admin_dashboard.jsp").forward(request, response);
+        }
     }
 
-    private String nvl(String s, String def) { return (s != null && !s.trim().isEmpty()) ? s.trim() : def; }
-    private String nvl(String s)             { return s != null ? s.trim() : ""; }
-    private int parseInt(String s, int def)  { try { return Integer.parseInt(s); } catch (Exception e) { return def; } }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // Check if user is logged in and is admin
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("loggedUser") == null) {
+            response.sendRedirect(request.getContextPath() + "/auth?action=login");
+            return;
+        }
+
+        User user = (User) session.getAttribute("loggedUser");
+        if (!user.isAdmin()) {
+            response.sendRedirect(request.getContextPath() + "/dashboard");
+            return;
+        }
+
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "";
+        }
+
+        try {
+            if (action.equals("deleteUser")) {
+                String userIdStr = request.getParameter("user_id");
+                int userId = 0;
+                if (userIdStr != null && !userIdStr.isEmpty()) {
+                    userId = Integer.parseInt(userIdStr);
+                }
+                userDAO.deleteUser(userId);
+                response.sendRedirect(request.getContextPath() + "/admin?action=users&msg=deleted");
+            } else if (action.equals("changeRole")) {
+                String userIdStr = request.getParameter("user_id");
+                int userId = 0;
+                if (userIdStr != null && !userIdStr.isEmpty()) {
+                    userId = Integer.parseInt(userIdStr);
+                }
+                String newRole = request.getParameter("role");
+                if (newRole != null && (newRole.equals("admin") || newRole.equals("student"))) {
+                    userDAO.changeRole(userId, newRole);
+                }
+                response.sendRedirect(request.getContextPath() + "/admin?action=users&msg=roleChanged");
+            } else if (action.equals("deleteGroup")) {
+                String groupIdStr = request.getParameter("group_id");
+                int groupId = 0;
+                if (groupIdStr != null && !groupIdStr.isEmpty()) {
+                    groupId = Integer.parseInt(groupIdStr);
+                }
+                groupDAO.delete(groupId);
+                response.sendRedirect(request.getContextPath() + "/admin?action=groups&msg=deleted");
+            } else {
+                response.sendRedirect(request.getContextPath() + "/admin");
+            }
+        } catch (Exception e) {
+            response.sendRedirect(request.getContextPath() + "/admin");
+        }
+    }
 }
