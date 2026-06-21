@@ -14,7 +14,6 @@
 <%
     List<StudySession> upcomingSessions = (List<StudySession>) request.getAttribute("upcomingSessions");
     List<Notification> notifications = (List<Notification>) request.getAttribute("notifications");
-    
 %>
 
     <!-- Welcome Banner -->
