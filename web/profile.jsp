@@ -20,13 +20,6 @@
         </div>
 
         <div class="p-4 p-md-5">
-
-            <% if (request.getAttribute("success") != null) { %>
-                <div class="alert alert-success py-2 mb-4"><%= request.getAttribute("success") %></div>
-            <% } %>
-            <% if (request.getAttribute("error") != null) { %>
-                <div class="alert alert-danger py-2 mb-4"><%= request.getAttribute("error") %></div>
-            <% } %>
             
             <div class="d-flex align-items-center mb-5">
                 <div class="bg-primary text-white rounded-circle d-flex justify-content-center align-items-center me-4" style="width: 80px; height: 80px;">

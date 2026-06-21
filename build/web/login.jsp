@@ -31,10 +31,6 @@
         <h3 class="fw-bold text-dark mb-1">Welcome Back</h3>
         <p class="text-muted mb-4">Sign in to continue your study journey</p>
 
-        <% if (request.getAttribute("error") != null) { %>
-            <div class="alert alert-danger py-2 small"><%= request.getAttribute("error") %></div>
-        <% } %>
-
         <form action="<%= ctx %>/auth" method="POST">
             <input type="hidden" name="action" value="login">
             

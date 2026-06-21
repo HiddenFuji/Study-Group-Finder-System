@@ -15,7 +15,7 @@
     List<StudySession> upcomingSessions = (List<StudySession>) request.getAttribute("upcomingSessions");
     List<Notification> notifications = (List<Notification>) request.getAttribute("notifications");
     
-    // Removed avg rating calculation%>
+%>
 
     <!-- Welcome Banner -->
     <div class="bg-primary text-white rounded-4 p-4 p-md-5 mb-4" style="box-shadow: 0 4px 6px -1px rgba(37,99,235,0.2);">

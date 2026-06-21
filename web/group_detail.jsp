@@ -25,13 +25,6 @@
         <i class="bi bi-arrow-left me-2"></i>Back to Find Groups
     </a>
 
-    <% if (request.getAttribute("error") != null) { %>
-        <div class="alert alert-danger py-2 mb-4"><%= request.getAttribute("error") %></div>
-    <% } %>
-    <% if (request.getAttribute("success") != null) { %>
-        <div class="alert alert-success py-2 mb-4"><%= request.getAttribute("success") %></div>
-    <% } %>
-
     <!-- Header Section -->
     <div class="simple-card p-4 p-md-5 mb-4">
         <div class="d-flex justify-content-between align-items-start mb-3">

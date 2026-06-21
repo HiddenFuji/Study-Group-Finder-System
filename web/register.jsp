@@ -36,10 +36,6 @@
         <h3 class="fw-bold text-dark mb-1">Create Account</h3>
         <p class="text-muted mb-4">Join thousands of students studying together</p>
 
-        <% if (request.getAttribute("error") != null) { %>
-            <div class="alert alert-danger py-2 small"><%= request.getAttribute("error") %></div>
-        <% } %>
-
         <form action="<%= ctx %>/auth" method="post">
             <input type="hidden" name="action" value="register">
 
