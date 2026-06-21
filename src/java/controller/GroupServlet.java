@@ -6,6 +6,11 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
 
 /**
  * GroupServlet — Controller Layer
@@ -108,7 +113,7 @@ public class GroupServlet extends HttpServlet {
         int pageSize        = 9;
         int offset          = (page - 1) * pageSize;
 
-        java.util.List<StudyGroup> groups = groupDAO.search(q, subject, year, meetingType, availOnly, pageSize, offset);
+        List<StudyGroup> groups = groupDAO.search(q, subject, year, meetingType, availOnly, pageSize, offset);
         int total      = groupDAO.countSearch(q, subject, year, meetingType, availOnly);
         int totalPages = (int) Math.ceil((double) total / pageSize);
 
@@ -122,9 +127,9 @@ public class GroupServlet extends HttpServlet {
         req.setAttribute("meetingType", meetingType);
         req.setAttribute("availOnly",   availOnly);
 
-        java.util.List<StudyGroup> myJoined = groupDAO.getJoinedByUser(user.getUserId());
-        java.util.List<StudyGroup> myCreated = groupDAO.getByCreator(user.getUserId());
-        java.util.Set<Integer> joinedGroupIds = new java.util.HashSet<>();
+        List<StudyGroup> myJoined = groupDAO.getJoinedByUser(user.getUserId());
+        List<StudyGroup> myCreated = groupDAO.getByCreator(user.getUserId());
+        Set<Integer> joinedGroupIds = new HashSet<>();
         if (myJoined != null) for (StudyGroup g : myJoined) joinedGroupIds.add(g.getGroupId());
         if (myCreated != null) for (StudyGroup g : myCreated) joinedGroupIds.add(g.getGroupId());
         req.setAttribute("joinedGroupIds", joinedGroupIds);
@@ -134,8 +139,8 @@ public class GroupServlet extends HttpServlet {
 
     private void showMyGroups(HttpServletRequest req, HttpServletResponse resp, User user)
             throws Exception {
-        java.util.List<StudyGroup> createdGroups = groupDAO.getByCreator(user.getUserId());
-        java.util.List<StudyGroup> joinedGroups  = groupDAO.getJoinedByUser(user.getUserId());
+        List<StudyGroup> createdGroups = groupDAO.getByCreator(user.getUserId());
+        List<StudyGroup> joinedGroups  = groupDAO.getJoinedByUser(user.getUserId());
         req.setAttribute("createdGroups", createdGroups);
         req.setAttribute("joinedGroups",  joinedGroups);
         req.getRequestDispatcher("/my_groups.jsp").forward(req, resp);
@@ -153,16 +158,16 @@ public class GroupServlet extends HttpServlet {
         boolean isCreator = (group.getCreatorId() == user.getUserId());
         boolean hasReview = reviewDAO.hasReviewed(user.getUserId(), groupId);
 
-        java.util.List<Membership>   members  = memberDAO.getMembersByGroup(groupId);
-        java.util.List<StudySession> sessions = sessionDAO.getByGroup(groupId, user.getUserId());
-        java.util.List<Discussion>   posts    = discDAO.getTopLevelByGroup(groupId);
-        java.util.List<Review>       reviews  = reviewDAO.getByGroup(groupId);
+        List<Membership>   members  = memberDAO.getMembersByGroup(groupId);
+        List<StudySession> sessions = sessionDAO.getByGroup(groupId, user.getUserId());
+        List<Discussion>   posts    = discDAO.getTopLevelByGroup(groupId);
+        List<Review>       reviews  = reviewDAO.getByGroup(groupId);
 
         // Build replies map for threaded discussion display
-        java.util.Map<Integer, java.util.List<Discussion>> repliesMap = new java.util.HashMap<>();
+        Map<Integer, List<Discussion>> repliesMap = new HashMap<>();
         if (posts != null) {
             for (Discussion p : posts) {
-                java.util.List<Discussion> replies = discDAO.getReplies(p.getMessageId());
+                List<Discussion> replies = discDAO.getReplies(p.getMessageId());
                 if (replies != null && !replies.isEmpty()) {
                     repliesMap.put(p.getMessageId(), replies);
                 }

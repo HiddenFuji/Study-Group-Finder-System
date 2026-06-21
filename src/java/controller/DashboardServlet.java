@@ -6,6 +6,10 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.List;
+import model.StudyGroup;
+import model.StudySession;
+import model.Notification;
 
 /**
  * DashboardServlet — Controller Layer
@@ -34,14 +38,14 @@ public class DashboardServlet extends HttpServlet {
             int uid = user.getUserId();
 
             // My groups (created + joined)
-            java.util.List<model.StudyGroup> createdGroups = groupDAO.getByCreator(uid);
-            java.util.List<model.StudyGroup> joinedGroups  = groupDAO.getJoinedByUser(uid);
+            List<StudyGroup> createdGroups = groupDAO.getByCreator(uid);
+            List<StudyGroup> joinedGroups  = groupDAO.getJoinedByUser(uid);
 
             // Upcoming sessions (max 5)
-            java.util.List<model.StudySession> upcomingSessions = sessionDAO.getUpcomingForUser(uid, 5);
+            List<StudySession> upcomingSessions = sessionDAO.getUpcomingForUser(uid, 5);
 
             // Notifications (unread count + list)
-            java.util.List<model.Notification> notifications = notifDAO.getForUser(uid);
+            List<Notification> notifications = notifDAO.getForUser(uid);
             int unreadCount = notifDAO.countUnread(uid);
 
             req.setAttribute("createdGroups",    createdGroups);

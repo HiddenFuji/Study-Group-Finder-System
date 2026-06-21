@@ -121,14 +121,9 @@ public class AuthServlet extends HttpServlet {
             newUser.setMajor(major != null ? major : "");
             newUser.setAcademicYear(academicYear);
 
-            boolean ok = userDAO.register(newUser, password);
-            if (ok) {
-                req.setAttribute("success", "Registration successful! Please login.");
-                req.getRequestDispatcher("/login.jsp").forward(req, resp);
-            } else {
-                req.setAttribute("error", "Registration failed. Please try again.");
-                req.getRequestDispatcher("/register.jsp").forward(req, resp);
-            }
+            userDAO.register(newUser, password);
+            req.setAttribute("success", "Registration successful! Please login.");
+            req.getRequestDispatcher("/login.jsp").forward(req, resp);
         } catch (Exception e) {
             req.setAttribute("error", "System error: " + e.getMessage());
             req.getRequestDispatcher("/register.jsp").forward(req, resp);

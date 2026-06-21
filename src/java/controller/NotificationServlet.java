@@ -6,6 +6,8 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.List;
+import model.Notification;
 
 /**
  * NotificationServlet — Controller Layer
@@ -26,7 +28,7 @@ public class NotificationServlet extends HttpServlet {
         if (user == null) { resp.sendRedirect(req.getContextPath() + "/auth?action=login"); return; }
 
         try {
-            java.util.List<model.Notification> notifications = notifDAO.getForUser(user.getUserId());
+            List<Notification> notifications = notifDAO.getForUser(user.getUserId());
             // Mark all as read when page is opened
             notifDAO.markAllRead(user.getUserId());
             req.setAttribute("notifications", notifications);
